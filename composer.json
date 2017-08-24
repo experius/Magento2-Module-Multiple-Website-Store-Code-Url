@@ -7,6 +7,7 @@
       "email": "info@experius.nl"
     }
   ],
+  "license": "GPL-3.0",
   "autoload": {
     "files": [
       "registration.php"
