@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <web>
+            <url>
+                <remove_website_code_from_store_url>1</remove_website_code_from_store_url>
+            </url>
+        </web>
+    </default>
+</config>
