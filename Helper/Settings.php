@@ -20,7 +20,9 @@
  */
 namespace Experius\MultipleWebsiteStoreCodeUrl\Helper;
 
-class Settings extends \Experius\Core\Helper\Settings
+use Magento\Framework\App\Helper\AbstractHelper;
+
+class Settings extends AbstractHelper
 {
 
     const CONFIG_PATH_REMOVE_WEBSITE_CODE_FROM_STORE_URL = 'remove_website_code_from_store_url';
@@ -29,7 +31,8 @@ class Settings extends \Experius\Core\Helper\Settings
 
     public function shouldRemoveWebsiteCodeFromStoreUrl()
     {
-        return $this->getConfigFlag(self::CONFIG_PATH_REMOVE_WEBSITE_CODE_FROM_STORE_URL);
+        return $this->scopeConfig->isSetFlag(
+            $this->configPathModule . "/" . self::CONFIG_PATH_REMOVE_WEBSITE_CODE_FROM_STORE_URL
+        );
     }
-
 }

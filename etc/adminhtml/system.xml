@@ -3,7 +3,7 @@
     <system>
         <section id="web">
             <group id="url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <field id="remove_website_code_from_store_url" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="remove_website_code_from_store_url" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Remove website code from store url</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
