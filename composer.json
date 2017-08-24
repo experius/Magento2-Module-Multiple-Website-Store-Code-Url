@@ -13,7 +13,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Experius\\ForceLogin\\": ""
+      "Experius\\MultipleWebsiteStoreCodeUrl\\": ""
     }
   }
 }
