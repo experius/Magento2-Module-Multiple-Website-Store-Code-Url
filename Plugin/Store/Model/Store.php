@@ -51,7 +51,11 @@ class Store
             return $url;
         }
         $storeCode = $subject->getCode();
-        $websiteCode = $subject->getWebsite()->getCode();
+        $website = $subject->getWebsite();
+        if (!$website) {
+            return $proceed($type, $secure);
+        }
+        $websiteCode = $website->getCode();
         $storeUrlCode = str_replace("{$websiteCode}_", "", $storeCode);
         $url = str_replace($storeCode, $storeUrlCode, $url);
         return $url;

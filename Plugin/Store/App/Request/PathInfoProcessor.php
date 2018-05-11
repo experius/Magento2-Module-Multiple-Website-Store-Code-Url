@@ -72,7 +72,7 @@ class PathInfoProcessor
         try {
             /** @var \Magento\Store\Api\Data\StoreInterface $store */
             $this->storeManager->getStore($storeCode);
-        } catch (NoSuchEntityException $e) {
+        } catch (\Exception $e) {
             return $proceed($request, $pathInfo);
         }
 
