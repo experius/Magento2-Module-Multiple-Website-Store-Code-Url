@@ -77,6 +77,6 @@ class PathInfoProcessor
         }
 
         $pathParts[0] = $storeCode;
-        return $proceed($request, implode('/', $pathParts));
+        return $proceed($request, "/". implode('/', $pathParts));
     }
 }
