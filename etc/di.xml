@@ -3,4 +3,10 @@
     <type name="Magento\Store\App\Request\PathInfoProcessor">
         <plugin name="Experius_MultipleWebsiteStoreCodeUrl_Plugin_Store_App_Request_PathInfoProcessor" type="Experius\MultipleWebsiteStoreCodeUrl\Plugin\Store\App\Request\PathInfoProcessor" sortOrder="1" />
     </type>
+	<type name="Magento\Store\App\Request\StorePathInfoValidator">
+		<plugin disabled="false" name="Experius_MultipleWebsiteStoreCodeUrl_Plugin_Magento_Store_App_Request_StorePathInfoValidator" sortOrder="10" type="Experius\MultipleWebsiteStoreCodeUrl\Plugin\Magento\Store\App\Request\StorePathInfoValidator"/>
+	</type>
+	<type name="Magento\UrlRewrite\Model\StoreSwitcher\RewriteUrl">
+		<plugin disabled="false" name="Experius_MultipleWebsiteStoreCodeUrl_Plugin_Magento_UrlRewrite_Model_StoreSwitcher_RewriteUrl" sortOrder="10" type="Experius\MultipleWebsiteStoreCodeUrl\Plugin\Magento\UrlRewrite\Model\StoreSwitcher\RewriteUrl"/>
+	</type>
 </config>
