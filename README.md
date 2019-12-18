@@ -4,3 +4,7 @@ This module enabled you to use the same store_code multiple times for different 
 The module has configuration to enable/disable it in the web/url section.
  
 **Important: the store code should include the website code otherwise it won't do anything.**
+
+# Changelog:
+- 2.0.0 added compatibility for magento 2.3.*.
+- 2.0.1 fixed issues with not being able to navigate on a not default store + fixed storeswitcher url redirect
