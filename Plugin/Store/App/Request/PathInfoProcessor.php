@@ -20,6 +20,7 @@
  */
 namespace Experius\MultipleWebsiteStoreCodeUrl\Plugin\Store\App\Request;
 
+use Experius\MultipleWebsiteStoreCodeUrl\Helper\Data;
 use Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -42,13 +43,16 @@ class PathInfoProcessor
      * PathInfoProcessor constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings $settings
+     * @param \Experius\MultipleWebsiteStoreCodeUrl\Helper\Data $data
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        Settings $settings
+        Settings $settings,
+        Data $data
     ) {
         $this->storeManager = $storeManager;
         $this->settings = $settings;
+        $this->data = $data;
     }
 
     public function aroundProcess(
@@ -65,18 +69,8 @@ class PathInfoProcessor
         if (!$website) {
             return $proceed($request, $pathInfo);
         }
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         $websiteCode = $website->getCode();
-        $storeCode = "{$websiteCode}_{$pathParts[0]}";
-
-        try {
-            /** @var \Magento\Store\Api\Data\StoreInterface $store */
-            $this->storeManager->getStore($storeCode);
-        } catch (\Exception $e) {
-            return $proceed($request, $pathInfo);
-        }
-
-        $pathParts[0] = $storeCode;
-        return $proceed($request, "/". implode('/', $pathParts));
+        $newPath = $this->data->setCorrectWebsiteCodeUrl($websiteCode,$pathInfo,false);
+        return $proceed($request, "/". $newPath);
     }
 }
