@@ -71,6 +71,6 @@ class PathInfoProcessor
         }
         $websiteCode = $website->getCode();
         $newPath = $this->data->setCorrectWebsiteCodeUrl($websiteCode,$pathInfo,false);
-        return $proceed($request, "/". $newPath);
+        return $proceed($request, "/" . ltrim($newPath, '/'));
     }
 }
