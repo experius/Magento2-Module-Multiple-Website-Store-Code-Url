@@ -21,6 +21,7 @@
 
 namespace Experius\MultipleWebsiteStoreCodeUrl\Helper;
 
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -35,14 +36,22 @@ class Data extends AbstractHelper
      */
     protected $storeManager;
 
+    /** @var \Magento\Framework\App\ResourceConnection */
+    protected $resource;
+
+    protected $currentWebsite = null;
+
     /**
      * Data constructor.
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->storeManager = $storeManager;
+        $this->resource = $resource;
     }
 
     /**
@@ -82,5 +91,37 @@ class Data extends AbstractHelper
         return false;
     }
 
-}
+    /**
+     * @param \Magento\Framework\App\Request\Http $request
+     * @return int|null
+     */
+    public function getRequestToWebsiteId($request)
+    {
+        $baseUrl = str_replace('www.', '', $request->getDistroBaseUrl());
 
+        $connection = $this->resource->getConnection();
+        $table = $connection->getTableName('core_config_data');
+        $websiteFilter = $connection->select()->from($table, ['scope_id'])
+            ->where('scope = ?', 'websites')
+            ->where('path in (?)', [Custom::XML_PATH_SECURE_BASE_URL, Custom::XML_PATH_UNSECURE_BASE_URL])
+            ->where('value = ?', $baseUrl);
+        $match = $connection->fetchCol($websiteFilter);
+
+        return count($match) > 0 ? (int)$match[0] : null;
+    }
+
+    /**
+     * Warning: Caches result
+     * @param \Magento\Framework\App\Request\Http $request
+     * @return \Magento\Store\Api\Data\WebsiteInterface|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getRequestToWebsite($request)
+    {
+        if (!$this->currentWebsite) {
+            $websiteId = $this->getRequestToWebsiteId($request);
+            $this->currentWebsite = $websiteId ? $this->storeManager->getWebsite($websiteId) : null;
+        }
+        return $this->currentWebsite;
+    }
+}
