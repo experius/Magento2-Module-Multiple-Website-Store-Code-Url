@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Experius\MultipleWebsiteStoreCodeUrl\Plugin\Magento\Store\App\Request;
 
+use Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings;
 
 /**
  * Class StorePathInfoValidator
@@ -25,6 +24,11 @@ class StorePathInfoValidator
     private $settings;
 
     /**
+     * @var \Experius\MultipleWebsiteStoreCodeUrl\Helper\Data
+     */
+    private $helper;
+
+    /**
      * @var StoreCookieManagerInterface
      */
     private $storeCookieManager;
@@ -33,7 +37,6 @@ class StorePathInfoValidator
      * @var \Magento\Framework\App\Request\PathInfo
      */
     private $pathInfo;
-
 
     /**
      * StorePathInfoValidator constructor.
@@ -45,12 +48,13 @@ class StorePathInfoValidator
     public function __construct(
         StoreManagerInterface $storeManager,
         Settings $settings,
+        \Experius\MultipleWebsiteStoreCodeUrl\Helper\Data $helper,
         StoreCookieManagerInterface $storeCookieManager,
         \Magento\Framework\App\Request\PathInfo $pathInfo
-    )
-    {
+    ) {
         $this->storeManager = $storeManager;
         $this->settings = $settings;
+        $this->helper = $helper;
         $this->storeCookieManager = $storeCookieManager;
         $this->pathInfo = $pathInfo;
     }
@@ -67,8 +71,7 @@ class StorePathInfoValidator
         $result,
         $request,
         $pathInfo = ''
-    )
-    {
+    ) {
         if ($result != null || !$this->settings->shouldRemoveWebsiteCodeFromStoreUrl()) {
             return $result;
         }
@@ -79,6 +82,10 @@ class StorePathInfoValidator
             );
         }
         $websiteCode = $this->storeCookieManager->getStoreCodeFromCookie();
+
+        if(!$websiteCode && $website = $this->helper->getRequestToWebsite($request)) {
+            $websiteCode = $website->getCode();
+        }
         if (!$websiteCode) {
             return $result;
         }
@@ -92,5 +99,4 @@ class StorePathInfoValidator
         }
         return $storeCode;
     }
-
 }
