@@ -97,14 +97,16 @@ class Data extends AbstractHelper
      */
     public function getRequestToWebsiteId($request)
     {
-        $baseUrl = str_replace('www.', '', $request->getDistroBaseUrl());
+        $baseUrl = str_replace('www.', '%', $request->getDistroBaseUrl());
+        // Strip schemas
+        $baseUrl = str_replace(['https://', 'http://'], '', $baseUrl);
 
         $connection = $this->resource->getConnection();
         $table = $connection->getTableName('core_config_data');
         $websiteFilter = $connection->select()->from($table, ['scope_id'])
             ->where('scope = ?', 'websites')
             ->where('path in (?)', [Custom::XML_PATH_SECURE_BASE_URL, Custom::XML_PATH_UNSECURE_BASE_URL])
-            ->where('value = ?', $baseUrl);
+            ->where('value like ?', "%$baseUrl");
         $match = $connection->fetchCol($websiteFilter);
 
         return count($match) > 0 ? (int)$match[0] : null;
