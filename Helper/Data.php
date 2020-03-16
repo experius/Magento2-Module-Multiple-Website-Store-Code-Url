@@ -97,7 +97,7 @@ class Data extends AbstractHelper
      */
     public function getRequestToWebsiteId($request)
     {
-        $baseUrl = str_replace('www.', '%', $request->getDistroBaseUrl());
+        $baseUrl = str_replace('www.', '', $request->getDistroBaseUrl());
         // Strip schemas
         $baseUrl = str_replace(['https://', 'http://'], '', $baseUrl);
 
