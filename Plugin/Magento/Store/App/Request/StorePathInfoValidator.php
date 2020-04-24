@@ -2,9 +2,12 @@
 
 namespace Experius\MultipleWebsiteStoreCodeUrl\Plugin\Magento\Store\App\Request;
 
+use Experius\MultipleWebsiteStoreCodeUrl\Helper\Data;
 use Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings;
+use Magento\Framework\App\Request\PathInfo;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ResponseFactory;
 
 /**
  * Class StorePathInfoValidator
@@ -24,7 +27,7 @@ class StorePathInfoValidator
     private $settings;
 
     /**
-     * @var \Experius\MultipleWebsiteStoreCodeUrl\Helper\Data
+     * @var Data
      */
     private $helper;
 
@@ -34,29 +37,38 @@ class StorePathInfoValidator
     private $storeCookieManager;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfo
+     * @var PathInfo
      */
     private $pathInfo;
+    /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
 
     /**
      * StorePathInfoValidator constructor.
+     *
      * @param StoreManagerInterface $storeManager
      * @param Settings $settings
+     * @param Data $helper
      * @param StoreCookieManagerInterface $storeCookieManager
-     * @param \Magento\Framework\App\Request\PathInfo $pathInfo
+     * @param PathInfo $pathInfo
+     * @param ResponseFactory $responseFactory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         Settings $settings,
-        \Experius\MultipleWebsiteStoreCodeUrl\Helper\Data $helper,
+        Data $helper,
         StoreCookieManagerInterface $storeCookieManager,
-        \Magento\Framework\App\Request\PathInfo $pathInfo
+        PathInfo $pathInfo,
+        ResponseFactory $responseFactory
     ) {
         $this->storeManager = $storeManager;
         $this->settings = $settings;
         $this->helper = $helper;
         $this->storeCookieManager = $storeCookieManager;
         $this->pathInfo = $pathInfo;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
@@ -72,7 +84,7 @@ class StorePathInfoValidator
         $request,
         $pathInfo = ''
     ) {
-        if ($result != null || !$this->settings->shouldRemoveWebsiteCodeFromStoreUrl()) {
+        if (!$this->settings->shouldRemoveWebsiteCodeFromStoreUrl()) {
             return $result;
         }
         if (empty($pathInfo)) {
@@ -80,6 +92,13 @@ class StorePathInfoValidator
                 $request->getRequestUri(),
                 $request->getBaseUrl()
             );
+        }
+        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+        if ($result) {
+            if (strpos($pathParts[0], '_') === false) {
+                return $result;
+            }
+
         }
         $websiteCode = $this->storeCookieManager->getStoreCodeFromCookie();
 
@@ -89,7 +108,15 @@ class StorePathInfoValidator
         if (!$websiteCode) {
             return $result;
         }
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+
+        if ($result && strpos($request->getRequestUri(), "/{$websiteCode}_") !== false) {
+            $requestUri = str_replace("/{$websiteCode}_", "", $request->getRequestUri());
+            $response = $this->responseFactory->create();
+            $response->setRedirect($request->getDistroBaseUrl() . $requestUri, 301);
+            $response->sendResponse();
+            exit;
+        }
+
         $storeCode = "{$websiteCode}_{$pathParts[0]}";
         try {
             /** @var \Magento\Store\Api\Data\StoreInterface $store */
