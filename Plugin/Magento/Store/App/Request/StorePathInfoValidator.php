@@ -109,7 +109,7 @@ class StorePathInfoValidator
             return $result;
         }
 
-        if ($result && strpos($request->getRequestUri(), "/{$websiteCode}_") !== false) {
+        if ($result && strpos($request->getRequestUri(), "/{$websiteCode}_") === 0) {
             $requestUri = str_replace("/{$websiteCode}_", "", $request->getRequestUri());
             $response = $this->responseFactory->create();
             $response->setRedirect($request->getDistroBaseUrl() . $requestUri, 301);

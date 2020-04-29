@@ -1,3 +1,10 @@
+## 2.1.1 (2020-04-29)
+
+[View Release](git@github.com:experius/Magento2-Module-Multiple-Website-Store-Code-Url.git/commits/tag/2.1.1)
+
+*  [BUGFIX] Solved issue with api incorrect redirect because it requires the original storecode *(Lewis Voncken)*
+
+
 ## 2.1.0 (2020-04-24)
 
 [View Release](git@github.com:experius/Magento2-Module-Multiple-Website-Store-Code-Url.git/commits/tag/2.1.0)
