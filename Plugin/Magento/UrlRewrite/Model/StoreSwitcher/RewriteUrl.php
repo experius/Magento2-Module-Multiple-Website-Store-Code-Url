@@ -67,6 +67,10 @@ class RewriteUrl
         $temp = explode('/',$redirectUrlTemp,5);
         if (rtrim($temp[3],'/') ==  rtrim(end($temp),'/'))
         {
+            if (strpos(rtrim($redirectUrl, '/'), rtrim($targetStore->getBaseUrl(),'/')) === false) {
+                $redirectUrl = $targetStore->getBaseUrl();
+                return [$fromStore,$targetStore,$redirectUrl];
+            }
             return $return;
         }
         unset($temp);
