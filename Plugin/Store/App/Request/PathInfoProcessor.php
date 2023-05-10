@@ -38,6 +38,11 @@ class PathInfoProcessor
      * @var \Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings
      */
     private $settings;
+    
+     /**
+     * @var Data 
+     */
+    protected $data;
 
     /**
      * PathInfoProcessor constructor.
