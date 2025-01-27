@@ -50,6 +50,7 @@ class RewriteUrl
      * @param $redirectUrl
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSwitch(
         \Magento\UrlRewrite\Model\StoreSwitcher\RewriteUrl $subject,
