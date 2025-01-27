@@ -115,7 +115,7 @@ class StorePathInfoValidator
             $response = $this->responseFactory->create();
             $response->setRedirect($request->getDistroBaseUrl() . $requestUri, 301);
             $response->sendResponse();
-            exit;
+            return ''; // This should never be reached because of the function above.
         }
 
         $storeCode = "{$websiteCode}_{$pathParts[0]}";
