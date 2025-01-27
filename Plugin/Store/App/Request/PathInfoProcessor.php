@@ -38,9 +38,9 @@ class PathInfoProcessor
      * @var \Experius\MultipleWebsiteStoreCodeUrl\Helper\Settings
      */
     private $settings;
-    
+
      /**
-     * @var Data 
+     * @var Data
      */
     protected $data;
 
@@ -60,8 +60,16 @@ class PathInfoProcessor
         $this->data = $data;
     }
 
+    /**
+     * @param \Magento\Store\App\Request\PathInfoProcessor $subject
+     * @param callable $proceed
+     * @param RequestInterface $request
+     * @param $pathInfo
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function aroundProcess(
-        /** @noinspection PhpUnusedParameterInspection */
         \Magento\Store\App\Request\PathInfoProcessor $subject,
         callable $proceed,
         RequestInterface $request,

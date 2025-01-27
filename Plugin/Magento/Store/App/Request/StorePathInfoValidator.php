@@ -77,6 +77,7 @@ class StorePathInfoValidator
      * @param $request
      * @param string $pathInfo
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetValidStoreCode(
         \Magento\Store\App\Request\StorePathInfoValidator $subject,
